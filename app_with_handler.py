@@ -19,14 +19,12 @@ from argparse import ArgumentParser
 from flask import Flask, request, abort
 from flask.logging import create_logger
 
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent,
+    TextMessage,
+    TextSendMessage,
 )
 
 app = Flask(__name__)
@@ -45,9 +43,16 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+
 @app.route("/ping", methods=["GET"])
 def ping():
     return "pong"
+
+
+@app.route("/sendmessage", methods=["GET", "POST"])
+def sendMessage():
+    return "OK"
+
 
 @app.route("/callback", methods=["POST"])
 def callback():
@@ -66,12 +71,13 @@ def callback():
 
     return "OK"
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text)
+        event.reply_token, TextSendMessage(text=event.message.text)
     )
+
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
