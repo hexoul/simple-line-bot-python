@@ -17,6 +17,8 @@ import sys
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
+from flask.logging import create_logger
+
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -28,6 +30,7 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
+logger = create_logger(app)
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
@@ -50,7 +53,7 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    logger.info("Request body: " + body)
 
     # handle webhook body
     try:
