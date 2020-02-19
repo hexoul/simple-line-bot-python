@@ -22,3 +22,9 @@ Run WebhookHandler sample
 ```
 $ python app_with_handler.py
 ```
+
+Fix coding style
+
+```
+$ black ./
+```
