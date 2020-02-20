@@ -51,6 +51,14 @@ def ping():
 
 @app.route("/sendmessage", methods=["GET", "POST"])
 def sendMessage():
+    # get request body as text
+    to = request.args.get("to")
+    message = request.args.get("message")
+    if type(to) != str or type(message) != str:
+        abort(400)
+
+    line_bot_api.push_message(to, TextSendMessage(text=message))
+
     return "OK"
 
 
